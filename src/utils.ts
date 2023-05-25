@@ -65,7 +65,8 @@ const pureFetch = async <T>(
     }
     const response = await fetch(`${url}?${params.toString()}`, {
         method: opts.method,
-        body: opts.body && opts.method === "POST" ? JSON.stringify(opts.body) : null,
+        mode: "cors",
+        body: opts.body && opts.method === "POST" ? opts.body : null,
         headers: {
             cookie: cookies(),
         },
