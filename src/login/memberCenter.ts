@@ -92,7 +92,7 @@ type RewardStatusResponse = Response<{
      *
      * 上限为 50 经验，且更新存在延迟
      *
-     * {@link | 专用API }
+     * {@link accountExp | 专用API }
      *
      */
     coins: number;
@@ -159,12 +159,27 @@ const rewardStatus = async (): Promise<RewardStatusResponse> => {
 
 const accountExpUrl = "https://www.bilibili.com/plus/account/exp.php";
 
+/**
+ * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/member_center.md#%E6%9F%A5%E8%AF%A2%E6%AF%8F%E6%97%A5%E6%8A%95%E5%B8%81%E8%8E%B7%E5%BE%97%E7%BB%8F%E9%AA%8C%E6%95%B0 | 文档}
+ */
 interface AccountExpResponse {
     code: number;
     message: string;
+    /**
+     * 每日投币所奖励的经验，上限为 50
+     */
     number: number;
 }
 
+/**
+ * 查询每日投币获得经验数
+ *
+ * 不存在更新延迟
+ *
+ * ---
+ *
+ * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/member_center.md#%E6%9F%A5%E8%AF%A2%E6%AF%8F%E6%97%A5%E6%8A%95%E5%B8%81%E8%8E%B7%E5%BE%97%E7%BB%8F%E9%AA%8C%E6%95%B0 | 文档}
+ */
 const accountExp = async (): Promise<AccountExpResponse> => {
     const response = await fetchGet<AccountExpResponse>(accountExpUrl, {
         withCookie: true,
