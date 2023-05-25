@@ -10,11 +10,11 @@ const setBiliJct = (biliJct: string): void => {
 };
 
 const logined = (): boolean => {
-    return SESSDATA !== "" && BILI_JCT !== "";
+    return SESSDATA !== "";
 };
 
 const cookies = (): string => {
-    if (SESSDATA === "" || BILI_JCT === "") return "";
+    if (SESSDATA === "") return "";
     return `SESSDATA=${SESSDATA};`;
 };
 
