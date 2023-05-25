@@ -1,4 +1,12 @@
-import { setSessdata, type Response, setBiliJct, sleep, setDedeUserID, setDedeUserID__ckMd5 } from "../../utils";
+import {
+    setSessdata,
+    type Response,
+    setBiliJct,
+    sleep,
+    setDedeUserID,
+    setDedeUserID__ckMd5,
+    fetchGet,
+} from "../../utils";
 import qrcode from "qrcode-terminal";
 
 const generateQrCodeUrl = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate";
@@ -6,24 +14,20 @@ const generateQrCodeUrl = "https://passport.bilibili.com/x/passport-login/web/qr
 /**
  * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/login_action/QR.md#web%E7%AB%AF%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95 | 文档}
  */
-type GenerateQrcodeResponse = Response & {
-    message: string;
-    ttl: number;
-    data: {
-        /**
-         * 二维码内容（登陆页面 url）
-         *
-         * 将字段内容转换为二维码使用 app 扫码
-         */
-        url: string;
-        /**
-         * 扫码登录密钥
-         *
-         * 恒为 32 字符
-         */
-        qrcode_key: string;
-    };
-};
+type GenerateQrcodeResponse = Response<{
+    /**
+     * 二维码内容（登陆页面 url）
+     *
+     * 将字段内容转换为二维码使用 app 扫码
+     */
+    url: string;
+    /**
+     * 扫码登录密钥
+     *
+     * 恒为 32 字符
+     */
+    qrcode_key: string;
+}>;
 
 /**
  * 申请二维码
@@ -33,10 +37,9 @@ type GenerateQrcodeResponse = Response & {
  * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/login_action/QR.md#web%E7%AB%AF%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95 | 文档}
  */
 const generateQrCode = async (): Promise<GenerateQrcodeResponse> => {
-    const response = await fetch(generateQrCodeUrl);
-    const result = (await response.json()) as GenerateQrcodeResponse;
-    qrcode.generate(result.data.url, { small: true });
-    return result;
+    const response = await fetchGet<GenerateQrcodeResponse>(generateQrCodeUrl, {});
+    qrcode.generate(response.data.url, { small: true });
+    return response;
 };
 
 const pollQrcodeUrl = "https://passport.bilibili.com/x/passport-login/web/qrcode/poll";
@@ -44,38 +47,35 @@ const pollQrcodeUrl = "https://passport.bilibili.com/x/passport-login/web/qrcode
 /**
  * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/login_action/QR.md#%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95web%E7%AB%AF | 文档}
  */
-type PollQrcodeResponse = Response & {
+type PollQrcodeResponse = Response<{
+    /**
+     * 登录页面 url
+     */
+    url: string;
+    /**
+     * 刷新 token
+     */
+    refresh_token: string;
+    /**
+     * 登陆时间戳
+     *
+     * 未登录时为 `0`，单位为毫秒
+     */
+    timestamp: number;
+    /**
+     * 登录状态码
+     *
+     * - `0` 登录成功
+     * - `86038` 二维码已失效
+     * - `86090` 二维码已扫码，等待确认
+     * - `86101` 未扫码
+     */
+    code: 0 | 86038 | 86090 | 86101;
+    /**
+     * 扫码状态信息
+     */
     message: string;
-    data: {
-        /**
-         * 登录页面 url
-         */
-        url: string;
-        /**
-         * 刷新 token
-         */
-        refresh_token: string;
-        /**
-         * 登陆时间戳
-         *
-         * 未登录时为 `0`，单位为毫秒
-         */
-        timestamp: number;
-        /**
-         * 登录状态码
-         *
-         * - `0` 登录成功
-         * - `86038` 二维码已失效
-         * - `86090` 二维码已扫码，等待确认
-         * - `86101` 未扫码
-         */
-        code: 0 | 86038 | 86090 | 86101;
-        /**
-         * 扫码状态信息
-         */
-        message: string;
-    };
-};
+}>;
 
 /**
  * 扫码登录
@@ -85,13 +85,13 @@ type PollQrcodeResponse = Response & {
  * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/login_action/QR.md#%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95web%E7%AB%AF | 文档}
  */
 const pollQrcode = async (qrcodeKey: string): Promise<PollQrcodeResponse> => {
-    const response = await fetch(`${pollQrcodeUrl}?qrcode_key=${qrcodeKey}`);
-    const result = (await response.json()) as PollQrcodeResponse;
+    // const response = await fetchGet(`${pollQrcodeUrl}?qrcode_key=${qrcodeKey}`);
+    const response = await fetchGet<PollQrcodeResponse>(pollQrcodeUrl, { params: { qrcode_key: qrcodeKey } });
     // login not success
-    if (result.data.code !== 0) return result;
+    if (response.data.code !== 0) return response;
 
     // login success, write SESSDATA and bili_jct
-    const url = new URL(result.data.url);
+    const url = new URL(response.data.url);
     url.searchParams.forEach((value, key) => {
         switch (key) {
             case "SESSDATA":
@@ -110,7 +110,7 @@ const pollQrcode = async (qrcodeKey: string): Promise<PollQrcodeResponse> => {
                 break;
         }
     });
-    return result;
+    return response;
 };
 
 const loginWithQrcode = async (): Promise<void> => {

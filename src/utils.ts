@@ -43,12 +43,13 @@ const cookies = (): string => {
     return `SESSDATA=${SESSDATA}; bili_jct=${BILI_JCT}; DedeUserID=${DedeUserID}; DedeUserID__ckMd5=${DedeUserID__ckMd5}`;
 };
 
-interface Response {
+interface Response<T> {
     code: number;
     message: string;
+    data: T;
 }
 
-const pureFetch = async <T extends Response>(
+const pureFetch = async <T>(
     url: string,
     opts: {
         method: "GET" | "POST";
@@ -73,12 +74,12 @@ const pureFetch = async <T extends Response>(
     return result;
 };
 
-const fetchGet = async <T extends Response>(
+const fetchGet = async <T>(
     url: string,
     opts: {
         params?: Record<string, boolean | number | string>;
         withCookie?: boolean;
-    },
+    } = {},
 ): Promise<T> => {
     return pureFetch(url, {
         method: "GET",
@@ -86,12 +87,12 @@ const fetchGet = async <T extends Response>(
     });
 };
 
-const fetchPost = async <T extends Response>(
+const fetchPost = async <T>(
     url: string,
     opts: {
         body?: Record<string, boolean | number | string>;
         withCookie?: boolean;
-    },
+    } = {},
 ): Promise<T> => {
     return pureFetch(url, {
         method: "POST",
