@@ -1,2 +1,2 @@
-export * from "./loginAction";
-export * from "./loginInfo";
+export * as loginAction from "./loginAction";
+export * as loginInfo from "./loginInfo";
