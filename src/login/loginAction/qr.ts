@@ -1,4 +1,4 @@
-import { setSessdata, type Response, setBiliJct, sleep } from "../../utils";
+import { setSessdata, type Response, setBiliJct, sleep, setDedeUserID, setDedeUserID__ckMd5 } from "../../utils";
 import qrcode from "qrcode-terminal";
 
 const generateQrCodeUrl = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate";
@@ -99,6 +99,12 @@ const pollQrcode = async (qrcodeKey: string): Promise<PollQrcodeResponse> => {
                 break;
             case "bili_jct":
                 setBiliJct(value);
+                break;
+            case "DedeUserID":
+                setDedeUserID(value);
+                break;
+            case "DedeUserID__ckMd5":
+                setDedeUserID__ckMd5(value);
                 break;
             default:
                 break;

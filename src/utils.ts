@@ -1,21 +1,46 @@
 let SESSDATA = "";
 let BILI_JCT = "";
+let DedeUserID = "";
+let DedeUserID__ckMd5 = "";
 
 const setSessdata = (sessdata: string): void => {
     SESSDATA = sessdata;
+};
+
+const getSessdata = (): string => {
+    return SESSDATA;
 };
 
 const setBiliJct = (biliJct: string): void => {
     BILI_JCT = biliJct;
 };
 
+const getBiliJct = (): string => {
+    return BILI_JCT;
+};
+
+const setDedeUserID = (dedeUserID: string): void => {
+    DedeUserID = dedeUserID;
+};
+
+const getDedeUserID = (): string => {
+    return DedeUserID;
+};
+
+const setDedeUserID__ckMd5 = (dedeUserID__ckMd5: string): void => {
+    DedeUserID__ckMd5 = dedeUserID__ckMd5;
+};
+
+const getDedeUserID__ckMd5 = (): string => {
+    return DedeUserID__ckMd5;
+};
+
 const logined = (): boolean => {
-    return SESSDATA !== "";
+    return SESSDATA !== "" && BILI_JCT !== "" && DedeUserID !== "" && DedeUserID__ckMd5 !== "";
 };
 
 const cookies = (): string => {
-    if (SESSDATA === "") return "";
-    return `SESSDATA=${SESSDATA};`;
+    return `SESSDATA=${SESSDATA}; bili_jct=${BILI_JCT}; DedeUserID=${DedeUserID}; DedeUserID__ckMd5=${DedeUserID__ckMd5}`;
 };
 
 interface Response {
@@ -77,4 +102,17 @@ const fetchPost = async <T extends Response>(
 const sleep = async (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 export type { Response };
-export { setSessdata, setBiliJct, logined, fetchGet, fetchPost, sleep };
+export {
+    setSessdata,
+    getSessdata,
+    setBiliJct,
+    getBiliJct,
+    setDedeUserID,
+    getDedeUserID,
+    setDedeUserID__ckMd5,
+    getDedeUserID__ckMd5,
+    logined,
+    fetchGet,
+    fetchPost,
+    sleep,
+};
