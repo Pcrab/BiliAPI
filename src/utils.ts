@@ -53,7 +53,7 @@ const pureFetch = async <T>(
     url: string,
     opts: {
         method: "GET" | "POST";
-        body?: Record<string, boolean | number | string> | undefined;
+        body?: BodyInit;
         params?: Record<string, boolean | number | string> | undefined;
         withCookie?: boolean;
     },
@@ -90,7 +90,7 @@ const fetchGet = async <T>(
 const fetchPost = async <T>(
     url: string,
     opts: {
-        body?: Record<string, boolean | number | string>;
+        body?: BodyInit;
         withCookie?: boolean;
     } = {},
 ): Promise<T> => {
