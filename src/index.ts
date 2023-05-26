@@ -1,4 +1,5 @@
 export * as login from "./login";
+export * as message from "./message";
 import {
     setSessdata,
     getSessdata,
