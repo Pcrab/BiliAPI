@@ -23,6 +23,8 @@ type LoginNoticeResponse = Response<{
 /**
  * 查询登录记录
  *
+ * 查询前首先需要设置用户 mid
+ *
  * ---
  *
  * {@link https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/login/login_notice.md#%E6%9F%A5%E8%AF%A2%E7%99%BB%E5%BD%95%E8%AE%B0%E5%BD%95 | 文档 }
