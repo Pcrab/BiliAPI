@@ -8,6 +8,8 @@ import {
     getDedeUserID,
     setDedeUserID__ckMd5,
     getDedeUserID__ckMd5,
+    setMid,
+    getMid,
 } from "./utils";
 
 const utils = {
@@ -19,6 +21,8 @@ const utils = {
     getDedeUserID,
     setDedeUserID__ckMd5,
     getDedeUserID__ckMd5,
+    setMid,
+    getMid,
 };
 
 export { utils };

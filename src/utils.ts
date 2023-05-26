@@ -2,6 +2,7 @@ let SESSDATA = "";
 let BILI_JCT = "";
 let DedeUserID = "";
 let DedeUserID__ckMd5 = "";
+let Mid = 0;
 
 const setSessdata = (sessdata: string): void => {
     SESSDATA = sessdata;
@@ -33,6 +34,14 @@ const setDedeUserID__ckMd5 = (dedeUserID__ckMd5: string): void => {
 
 const getDedeUserID__ckMd5 = (): string => {
     return DedeUserID__ckMd5;
+};
+
+const setMid = (mid: number): void => {
+    Mid = mid;
+};
+
+const getMid = (): number => {
+    return Mid;
 };
 
 const logined = (): boolean => {
@@ -113,6 +122,8 @@ export {
     getDedeUserID,
     setDedeUserID__ckMd5,
     getDedeUserID__ckMd5,
+    setMid,
+    getMid,
     logined,
     fetchGet,
     fetchPost,
